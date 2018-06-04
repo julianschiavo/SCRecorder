@@ -486,7 +486,7 @@ static char* SCRecorderPhotoOptionsContext = "PhotoOptionsContext";
     [self pause:nil];
 }
 
-- (void)pause:(void(^)())completionHandler {
+- (void)pause:(void(^)(void))completionHandler {
     _isRecording = NO;
     
     void (^block)() = ^{
