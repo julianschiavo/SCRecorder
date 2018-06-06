@@ -85,7 +85,7 @@
     }
 }
 
-- (void)startProcessingWithBlock:(id (^)())processingBlock {
+- (void)startProcessingWithBlock:(id (^)(void))processingBlock {
     [NSThread detachNewThreadSelector:@selector(_process:) toTarget:self withObject:processingBlock];
 }
 
