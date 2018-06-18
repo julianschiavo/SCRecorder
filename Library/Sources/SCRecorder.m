@@ -112,17 +112,21 @@ static char* SCRecorderPhotoOptionsContext = "PhotoOptionsContext";
 }
 
 - (void)applicationDidEnterBackground:(id)sender {
-    _shouldAutoresumeRecording = _isRecording;
-    [self pause];
+    dispatch_async(_sessionQueue, ^{
+        _shouldAutoresumeRecording = _isRecording;
+        [self pause];
+    });
 }
 
 - (void)applicationDidBecomeActive:(id)sender {
-    [self reconfigureVideoInput:self.videoConfiguration.enabled audioInput:self.audioConfiguration.enabled];
-    
-    if (_shouldAutoresumeRecording) {
-        _shouldAutoresumeRecording = NO;
-        [self record];
-    }
+    dispatch_async(_sessionQueue, ^{
+        [self reconfigureVideoInput:self.videoConfiguration.enabled audioInput:self.audioConfiguration.enabled];
+
+        if (_shouldAutoresumeRecording) {
+            _shouldAutoresumeRecording = NO;
+            [self record];
+        }
+    });
 }
 
 - (void)deviceOrientationChanged:(id)sender {
@@ -1052,9 +1056,13 @@ static char* SCRecorderPhotoOptionsContext = "PhotoOptionsContext";
         if (shouldConfigureVideo) {
             [self configureDevice:[self videoDevice] mediaType:AVMediaTypeVideo error:&videoError];
             _transformFilter = nil;
-            dispatch_sync(_sessionQueue, ^{
+            if ([SCRecorder isSessionQueue]) {
                 [self updateVideoOrientation];
-            });
+            } else {
+                dispatch_sync(_sessionQueue, ^{
+                    [self updateVideoOrientation];
+                });
+            }
         }
         
         NSError *audioError = nil;
@@ -1068,12 +1076,16 @@ static char* SCRecorderPhotoOptionsContext = "PhotoOptionsContext";
         id<SCRecorderDelegate> delegate = self.delegate;
         if (shouldConfigureAudio) {
             if ([delegate respondsToSelector:@selector(recorder:didReconfigureAudioInput:)]) {
-                [delegate recorder:self didReconfigureAudioInput:audioError];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [delegate recorder:self didReconfigureAudioInput:audioError];
+                });
             }
         }
         if (shouldConfigureVideo) {
             if ([delegate respondsToSelector:@selector(recorder:didReconfigureVideoInput:)]) {
-                [delegate recorder:self didReconfigureVideoInput:videoError];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [delegate recorder:self didReconfigureVideoInput:videoError];
+                });
             }
         }
     }
