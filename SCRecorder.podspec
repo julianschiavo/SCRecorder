@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files  = 'Library/Sources/*.{h,m}'
   s.public_header_files = 'Library/Sources/*.h'
   s.requires_arc = true
-  s.weak_frameworks = 'Metal', 'GLKit'
+  s.weak_frameworks = 'Metal'
   s.frameworks = 'AVFoundation'
 
 end

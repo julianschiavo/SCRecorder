@@ -10,7 +10,6 @@
 #import <CoreImage/CoreImage.h>
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
-#import <GLKit/GLKit.h>
 #import "SCFilter.h"
 #import "SCContext.h"
 

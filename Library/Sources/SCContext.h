@@ -28,11 +28,6 @@ typedef NS_ENUM(NSInteger, SCContextType) {
     SCContextTypeCoreGraphics,
 
     /**
-     Create a hardware accelerated SCContext with EAGL (OpenGL)
-     */
-    SCContextTypeEAGL,
-
-    /**
      Creates a standard SCContext hardware accelerated.
      */
     SCContextTypeDefault,
@@ -44,7 +39,6 @@ typedef NS_ENUM(NSInteger, SCContextType) {
 };
 
 extern NSString *__nonnull const SCContextOptionsCGContextKey;
-extern NSString *__nonnull const SCContextOptionsEAGLContextKey;
 extern NSString *__nonnull const SCContextOptionsMTLDeviceKey;
 
 /**
@@ -61,11 +55,6 @@ extern NSString *__nonnull const SCContextOptionsMTLDeviceKey;
  The type with with which this SCContext was created
  */
 @property (readonly, nonatomic) SCContextType type;
-
-/**
- Will be non null if the type is SCContextTypeEAGL
- */
-@property (readonly, nonatomic) EAGLContext *__nullable EAGLContext;
 
 /**
  Will be non null if the type is SCContextTypeMetal
