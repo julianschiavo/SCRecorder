@@ -16,7 +16,7 @@
 #else
 @import MetalKit;
 
-@interface SCImageView()<GLKViewDelegate, MTKViewDelegate>
+@interface SCImageView() <MTKViewDelegate>
 
 @property (nonatomic, strong) MTKView *MTKView;
 #endif
