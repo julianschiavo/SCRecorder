@@ -11,6 +11,7 @@
 @implementation SCContext
 
 NSString *__nonnull const SCContextOptionsCGContextKey = @"CGContext";
+NSString *__nonnull const SCContextOptionsMTLDeviceKey = @"MTLDevice";
 
 static NSDictionary *SCContextCreateCIContextOptions() {
     return @{kCIContextWorkingColorSpace : [NSNull null], kCIContextOutputColorSpace : [NSNull null]};

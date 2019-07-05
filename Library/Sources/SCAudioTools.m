@@ -14,18 +14,6 @@
     
 }
 
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-+ (void)overrideCategoryMixWithOthers {
-	
-    UInt32 doSetProperty = 1;
-    
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    AudioSessionSetProperty (kAudioSessionProperty_OverrideCategoryMixWithOthers, sizeof(doSetProperty), &doSetProperty);
-#pragma clang diagnostic pop
-}
-#endif
-
 + (void)mixAudio:(AVAsset*)audioAsset startTime:(CMTime)startTime withVideo:(NSURL*)inputUrl affineTransform:(CGAffineTransform)affineTransform  toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration withCompletionBlock:(void(^)(NSError *))completionBlock {
 	NSError * error = nil;
 	AVMutableComposition * composition = [[AVMutableComposition alloc] init];
