@@ -11,8 +11,6 @@
 @implementation SCContext
 
 NSString *__nonnull const SCContextOptionsCGContextKey = @"CGContext";
-NSString *__nonnull const SCContextOptionsEAGLContextKey = @"EAGLContext";
-NSString *__nonnull const SCContextOptionsMTLDeviceKey = @"MTLDevice";
 
 static NSDictionary *SCContextCreateCIContextOptions() {
     return @{kCIContextWorkingColorSpace : [NSNull null], kCIContextOutputColorSpace : [NSNull null]};
@@ -46,19 +44,6 @@ static NSDictionary *SCContextCreateCIContextOptions() {
     return self;
 }
 
-- (instancetype)initWithEAGLContext:(EAGLContext *)context {
-    self = [super init];
-    
-    if (self) {
-        _EAGLContext = context;
-
-        _CIContext = [CIContext contextWithEAGLContext:_EAGLContext options:SCContextCreateCIContextOptions()];
-        _type = SCContextTypeEAGL;
-    }
-    
-    return self;
-}
-
 - (instancetype)initWithMTLDevice:(id<MTLDevice>)device {
     self = [super init];
 
@@ -80,8 +65,6 @@ static NSDictionary *SCContextCreateCIContextOptions() {
             return [CIContextClass respondsToSelector:@selector(contextWithMTLDevice:options:)];
         case SCContextTypeCoreGraphics:
             return [CIContextClass respondsToSelector:@selector(contextWithCGContext:options:)];
-        case SCContextTypeEAGL:
-            return [CIContextClass respondsToSelector:@selector(contextWithEAGLContext:options:)];
         case SCContextTypeAuto:
         case SCContextTypeDefault:
         case SCContextTypeCPU:
@@ -95,9 +78,7 @@ static NSDictionary *SCContextCreateCIContextOptions() {
 //    if ([SCContext supportsType:SCContextTypeMetal]) {
 //        return SCContextTypeMetal;
 //    } else
-    if ([SCContext supportsType:SCContextTypeEAGL]) {
-        return SCContextTypeEAGL;
-    } else if ([SCContext supportsType:SCContextTypeCoreGraphics]) {
+    if ([SCContext supportsType:SCContextTypeCoreGraphics]) {
         return SCContextTypeCoreGraphics;
     } else {
         return SCContextTypeDefault;
@@ -129,21 +110,6 @@ static NSDictionary *SCContextCreateCIContextOptions() {
             return [[SCContext alloc] initWithSoftwareRenderer:YES];
         case SCContextTypeDefault:
             return [[SCContext alloc] initWithSoftwareRenderer:NO];
-        case SCContextTypeEAGL: {
-            EAGLContext *context = options[SCContextOptionsEAGLContextKey];
-
-            if (context == nil) {
-                static dispatch_once_t onceToken;
-                static EAGLSharegroup *shareGroup;
-                dispatch_once(&onceToken, ^{
-                    shareGroup = [EAGLSharegroup new];
-                });
-
-                context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:shareGroup];
-            }
-
-            return [[SCContext alloc] initWithEAGLContext:context];
-        }
         default:
             [NSException raise:@"InvalidContextType" format:@"Invalid context type %d", (int)contextType];
             break;

@@ -11,7 +11,7 @@
 #import "SCContext.h"
 
 #if TARGET_IPHONE_SIMULATOR
-@interface SCImageView()<GLKViewDelegate>
+@interface SCImageView()
 
 #else
 @import MetalKit;
@@ -21,7 +21,6 @@
 @property (nonatomic, strong) MTKView *MTKView;
 #endif
 
-@property (nonatomic, strong) GLKView *GLKView;
 @property (nonatomic, strong) id<MTLCommandQueue> MTLCommandQueue;
 @property (nonatomic, strong) SCSampleBufferHolder *sampleBufferHolder;
 
@@ -90,18 +89,12 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
 
-    _GLKView.frame = self.bounds;
-
 #if !(TARGET_IPHONE_SIMULATOR)
     _MTKView.frame = self.bounds;
 #endif
 }
 
 - (void)unloadContext {
-    if (_GLKView != nil) {
-        [_GLKView removeFromSuperview];
-        _GLKView = nil;
-    }
 #if !(TARGET_IPHONE_SIMULATOR)
     if (_MTKView != nil) {
         _MTLCommandQueue = nil;
@@ -119,12 +112,6 @@
     if (context != nil) {
         switch (context.type) {
             case SCContextTypeCoreGraphics:
-                break;
-            case SCContextTypeEAGL:
-                _GLKView = [[GLKView alloc] initWithFrame:self.bounds context:context.EAGLContext];
-                _GLKView.contentScaleFactor = self.contentScaleFactor;
-                _GLKView.delegate = self;
-                [self insertSubview:_GLKView atIndex:0];
                 break;
 #if !(TARGET_IPHONE_SIMULATOR)
             case SCContextTypeMetal:
@@ -150,7 +137,6 @@
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
 
-    [_GLKView setNeedsDisplay];
 #if !(TARGET_IPHONE_SIMULATOR)
     [_MTKView setNeedsDisplay];
 #endif
@@ -192,9 +178,7 @@
     if (image != nil) {
         image = [image imageByApplyingTransform:self.preferredCIImageTransform];
 
-        if (self.context.type != SCContextTypeEAGL) {
-            image = [image imageByApplyingOrientation:4];
-        }
+        image = [image imageByApplyingOrientation:4];
 
         if (self.scaleAndResizeCIImageAutomatically) {
             image = [self scaleAndResizeCIImage:image forRect:rect];
@@ -335,22 +319,6 @@ static CGRect CGRectMultiply(CGRect rect, CGFloat contentScale) {
     rect.size.height *= contentScale;
 
     return rect;
-}
-
-#pragma mark -- GLKViewDelegate
-
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    @autoreleasepool {
-        rect = CGRectMultiply(rect, self.contentScaleFactor);
-        glClearColor(0, 0, 0, 0);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        CIImage *image = [self renderedCIImageInRect:rect];
-
-        if (image != nil) {
-            [_context.CIContext drawImage:image inRect:rect fromRect:image.extent];
-        }
-    }
 }
 
 #if !(TARGET_IPHONE_SIMULATOR)
