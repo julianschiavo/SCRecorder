@@ -18,9 +18,6 @@
 #import "SCRecorderTools.h"
 #import "SCRecorderDelegate.h"
 
-// Convenience
-#import "SCRecorderHeader.h"
-
 @interface SCRecorder : NSObject<AVCaptureAudioDataOutputSampleBufferDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureFileOutputRecordingDelegate>
 
 /**
@@ -261,11 +258,6 @@
  The underlying AVCaptureAudioDataOutput
  */
 @property (readonly, nonatomic) AVCaptureAudioDataOutput *__nullable audioOutput;
-
-/**
- The underlying AVCaptureStillImageOutput
- */
-@property (readonly, nonatomic) AVCaptureStillImageOutput *__nullable photoOutput;
 
 /**
  The dispatch queue that the SCRecorder uses for sending messages to the attached
