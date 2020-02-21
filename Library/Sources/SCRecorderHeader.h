@@ -25,3 +25,6 @@
 #import "UIImage+SCSaveToCameraRoll.h"
 #import "SCFilter+VideoComposition.h"
 #import "SCFilter+UIImage.h"
+#import "SCAudioTools.h"
+#import "SCSampleBufferHolder.h"
+#import "SCRecorderFocusTargetView.h"

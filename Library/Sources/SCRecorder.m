@@ -7,6 +7,7 @@
 //
 
 #import "SCRecorder.h"
+#import "SCSampleBufferHolder.h"
 #import "SCRecordSession_Internal.h"
 #define dispatch_handler(x) if (x != nil) dispatch_async(dispatch_get_main_queue(), x)
 #define kSCRecorderRecordSessionQueueKey "SCRecorderRecordSessionQueue"
