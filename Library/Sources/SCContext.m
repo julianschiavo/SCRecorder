@@ -76,10 +76,9 @@ static NSDictionary *SCContextCreateCIContextOptions() {
 
 + (SCContextType)suggestedContextType {
     // On iOS 9.0, Metal does not behave nicely with gaussian blur filters
-//    if ([SCContext supportsType:SCContextTypeMetal]) {
-//        return SCContextTypeMetal;
-//    } else
-    if ([SCContext supportsType:SCContextTypeCoreGraphics]) {
+    if ([SCContext supportsType:SCContextTypeMetal]) {
+        return SCContextTypeMetal;
+    } else if ([SCContext supportsType:SCContextTypeCoreGraphics]) {
         return SCContextTypeCoreGraphics;
     } else {
         return SCContextTypeDefault;

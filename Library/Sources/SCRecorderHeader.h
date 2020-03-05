@@ -21,8 +21,6 @@
 #import "SCRecorderTools.h"
 #import "SCRecorderDelegate.h"
 #import "SCContext.h"
-#import "NSURL+SCSaveToCameraRoll.h"
-#import "UIImage+SCSaveToCameraRoll.h"
 #import "SCFilter+VideoComposition.h"
 #import "SCFilter+UIImage.h"
 #import "SCAudioTools.h"

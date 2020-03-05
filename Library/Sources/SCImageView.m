@@ -178,7 +178,16 @@
     if (image != nil) {
         image = [image imageByApplyingTransform:self.preferredCIImageTransform];
 
-        image = [image imageByApplyingOrientation:4];
+        switch (self.context.type) {
+            case SCContextTypeMetal:
+                // Framebuffer coordinate in Metal: +Y is down
+                break;
+            case SCContextTypeCPU:
+            case SCContextTypeDefault:
+            case SCContextTypeCoreGraphics:
+            case SCContextTypeAuto:
+                image = [image imageByApplyingOrientation:4];
+        }
 
         if (self.scaleAndResizeCIImageAutomatically) {
             image = [self scaleAndResizeCIImage:image forRect:rect];
