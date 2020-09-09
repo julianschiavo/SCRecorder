@@ -1,0 +1,5 @@
+module SCRecorder {
+    header "SCRecorder-Bridging-Header.h"
+    link "SCRecorder"
+    export *
+}
