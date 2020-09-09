@@ -1,0 +1,4 @@
+module SCRecorder {
+    umbrella header "/Users/julian/Developer/Packages/SCRecorder/Library/Sources/SCRecorder.h"
+    export *
+}

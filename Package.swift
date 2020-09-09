@@ -6,12 +6,13 @@ import PackageDescription
 let package = Package(
     name: "SCRecorder",
     platforms: [
-       .iOS(.v13)
+        .iOS(.v13)
     ],
     products: [
-        .library(name: "SCRecorder", targets: ["SCRecorder"]),
+        .library(name: "SCRecorder", targets: ["SCRecorder"])//, "SCRecorderObjC"]),
     ],
     targets: [
-        .target(name: "SCRecorder", dependencies: [], path: "Library/Sources"),
+        .target(name: "SCRecorder", dependencies: [], path: "Library", sources: ["Sources"], publicHeadersPath: "Sources", cSettings: [.headerSearchPath("Sources")]),
+//        .target(name: "SCRecorder", dependencies: ["SCRecorderObjC"], path: "Library/SwiftSources"),
     ]
 )
